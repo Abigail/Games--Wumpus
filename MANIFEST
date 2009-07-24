@@ -1,0 +1,6 @@
+lib/Games/Wumpus.pm
+Makefile.PL
+MANIFEST
+t/000_basic.t
+Changes
+README
