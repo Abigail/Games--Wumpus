@@ -9,17 +9,18 @@ no  warnings 'syntax';
 use ExtUtils::MakeMaker;
 
 my %args = (
-    NAME                 => 'Games::Wumpus',
-    VERSION_FROM         => 'lib/Games/Wumpus.pm',
-    ABSTRACT_FROM        => 'lib/Games/Wumpus.pm',
-    PREREQ_PM            => { },
-    MIN_PERL_VERSION     =>  5.006,
-    AUTHOR               => 'Abigail <cpan@abigail.be>',
-    LICENSE              => 'mit',
+    NAME                 =>  'Games::Wumpus',
+    VERSION_FROM         =>  'lib/Games/Wumpus.pm',
+    ABSTRACT_FROM        =>  'lib/Games/Wumpus.pm',
+    PREREQ_PM            => {'List::Util'            => 0,
+                             'Hash::Util::FieldHash' => 0,},
+    MIN_PERL_VERSION     =>   5.010,
+    AUTHOR               =>  'Abigail <cpan@abigail.be>',
+    LICENSE              =>  'mit',
     META_MERGE           => {
         build_requires   => {'Test::More' => 0},
         resources        => {
-            repository   => 'git://github.com/Abigail/games--wumpus.git',
+            repository   =>  'git://github.com/Abigail/games--wumpus.git',
         },
         keywords         => [qw [ ]],
     },

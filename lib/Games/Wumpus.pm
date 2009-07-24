@@ -1,11 +1,32 @@
 package Games::Wumpus;
 
-use 5.006;
+use 5.010;
 use strict;
 use warnings;
 no  warnings 'syntax';
 
 our $VERSION = '2009072401';
+
+use Hash::Util::FieldHash qw [fieldhash];
+
+use Games::Wumpus::Constant;
+use Games::Wumpus::Cave;
+use Games::Wumpus::Room;
+
+fieldhash my %cave;
+fieldhash my %arrows;
+
+sub new  {bless \do {my $var} => $class}
+sub init {
+    my $self = shift;
+
+    $cave   {$self} = Games::Wumpus::Cave -> new -> init;
+    $arrows {$self} = $NR_OF_ARROWS;
+
+    $cave   {$self} -> location = $cave -> start;
+
+    $self;
+}
 
 
 1;
