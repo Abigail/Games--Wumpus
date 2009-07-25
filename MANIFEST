@@ -2,5 +2,9 @@ lib/Games/Wumpus.pm
 Makefile.PL
 MANIFEST
 t/000_basic.t
+t/010_constants.t
+t/100_room.t
+t/200_cave.t
+t/201_describe.t
 Changes
 README
