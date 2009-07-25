@@ -9,23 +9,56 @@ our $VERSION = '2009072401';
 
 use Hash::Util::FieldHash qw [fieldhash];
 
-use Games::Wumpus::Constant;
+use Games::Wumpus::Constants;
 use Games::Wumpus::Cave;
 use Games::Wumpus::Room;
 
 fieldhash my %cave;
 fieldhash my %arrows;
 
-sub new  {bless \do {my $var} => $class}
+sub new  {bless \do {my $var} => shift}
 sub init {
     my $self = shift;
 
     $cave   {$self} = Games::Wumpus::Cave -> new -> init;
     $arrows {$self} = $NR_OF_ARROWS;
 
-    $cave   {$self} -> location = $cave -> start;
+    $cave   {$self} -> set_location ($cave {$self} -> start);
 
     $self;
+}
+
+#
+# Describe the current room.
+#
+sub describe {
+    my $self = shift;
+
+    my $text;
+
+    my $room = $cave {$self} -> location;
+
+    $text  = "You are in room " . $room -> name . ".\n";
+    $text .= "I smell a Wumpus!\n" if $room -> near_hazard ($WUMPUS);
+    $text .= "I feel a draft.\n"   if $room -> near_hazard ($PIT);
+    $text .= "Bats nearby!\n"      if $room -> near_hazard ($BAT);
+
+    $text .= "Tunnels lead to " . join " ", sort {$a <=> $b}
+                                            map  {$_ -> name} $room -> exits;
+    $text .= ".\n";
+
+    $text;
+}
+
+
+
+
+#
+# Move to a different room.
+#
+sub move {
+    my $self = shift;
+    my $room = shift;
 }
 
 

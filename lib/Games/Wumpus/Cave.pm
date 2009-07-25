@@ -23,16 +23,20 @@ use Games::Wumpus::Room;
 use Hash::Util::FieldHash qw [fieldhash];
 use List::Util            qw [shuffle];
 
-fieldhash my %rooms;   # List of rooms.
-fieldhash my %wumpus;  # Location of the wumpus.
-fieldhash my %start;   # Start location.
-fieldhash my %player;  # Location of the player.
+fieldhash my %rooms;     # List of rooms.
+fieldhash my %wumpus;    # Location of the wumpus.
+fieldhash my %start;     # Start location.
+fieldhash my %location;  # Location of the player.
 
 #
 # Accessors
 #
-sub rooms {@{$rooms {$_ [0]}}}
-sub start {$start {$_ [0]}}
+sub     rooms    {@{$rooms    {$_ [0]}}}
+
+sub     location {  $location {$_ [0]}}
+sub set_location {  $location {$_ [0]} = $_ [1]}
+
+sub     start    {  $start    {$_ [0]}}
 
 #
 # Construction
@@ -51,6 +55,10 @@ sub init {
     $self -> _name_rooms;
     $self -> _create_hazards;
 }
+
+#
+# Accessors
+#
 
 #
 # Create the given number of rooms. 

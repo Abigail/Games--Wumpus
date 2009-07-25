@@ -44,6 +44,19 @@ sub   add_exit         {push @{$exit {$_ [0]}} => $_ [1]}
 sub       exits        {     @{$exit {$_ [0]}}}
 sub       exit_by_name {grep {$_ -> name eq $_ [1]} $_ [0] -> exits}
 
+#
+# Hazards nearby?
+#
+
+sub near_hazard {
+    my $self   = shift;
+    my $hazard = shift;
+    foreach my $exit ($self -> exits) {
+        return 1 if $exit -> has_hazard ($hazard);
+    }
+    return 0;
+}
+
 1;
 
 __END__
