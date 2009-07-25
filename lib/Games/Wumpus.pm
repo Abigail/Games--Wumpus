@@ -28,6 +28,11 @@ sub init {
     $self;
 }
 
+#
+# Accessors
+#
+sub cave {$cave {$_ [0]}}
+
 
 #
 # Move to a different room.
