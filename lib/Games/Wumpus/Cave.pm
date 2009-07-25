@@ -58,10 +58,6 @@ sub init {
 }
 
 #
-# Accessors
-#
-
-#
 # Create the given number of rooms. 
 # Note that the rooms aren't named here, nor are either exits or hazards set.
 #
