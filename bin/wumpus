@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+
+use 5.010;
+
+use strict;
+use warnings;
+no  warnings 'syntax';
+
+use Games::Wumpus;
+
+my $game = Games::Wumpus -> new -> init;
+
+say $game -> describe;
+
+
+__END__

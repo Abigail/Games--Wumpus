@@ -24,6 +24,7 @@ my %args = (
         },
         keywords         => [qw [ ]],
     },
+    EXE_FILES            => [qw [bin/wumpus]],
 );
 
 my %filter = (

@@ -31,8 +31,21 @@ sub init {
 #
 # Accessors
 #
-sub cave {$cave {$_ [0]}}
+sub cave   {$cave   {$_ [0]}}
+sub arrows {$arrows {$_ [0]}}
 
+
+#
+# Describe the current situation
+#
+sub describe {
+    my $self = shift;
+    
+    my $text = $self -> cave -> describe;
+    $text .= "You have " . $self -> arrows . " arrows left.\n";
+
+    $text;
+}
 
 #
 # Move to a different room.
