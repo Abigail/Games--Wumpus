@@ -55,4 +55,13 @@ is $start,  1, "1 Start location";
 is $fail,   0, "No duplicates";
 
 
+#
+# Check getting room by name.
+#
+foreach my $i (1 .. 20) {
+    my $room = $cave -> room ($i);
+    is $room -> name, $i, "Got room $i";
+}
+
+
 __END__

@@ -23,20 +23,21 @@ use Games::Wumpus::Room;
 use Hash::Util::FieldHash qw [fieldhash];
 use List::Util            qw [shuffle];
 
-fieldhash my %rooms;     # List of rooms.
-fieldhash my %wumpus;    # Location of the wumpus.
-fieldhash my %start;     # Start location.
-fieldhash my %location;  # Location of the player.
+fieldhash my %rooms;      # List of rooms.
+fieldhash my %wumpus;     # Location of the wumpus.
+fieldhash my %start;      # Start location.
+fieldhash my %location;   # Location of the player.
 
 #
 # Accessors
 #
-sub     rooms    {@{$rooms    {$_ [0]}}}
+sub     rooms     {@{$rooms    {$_ [0]}}}
+sub     room      {  $rooms    {$_ [0]} [$_ [1] - 1]}
 
-sub     location {  $location {$_ [0]}}
-sub set_location {  $location {$_ [0]} = $_ [1]}
+sub     location  {  $location {$_ [0]}}
+sub set_location  {  $location {$_ [0]} = $_ [1]}
 
-sub     start    {  $start    {$_ [0]}}
+sub     start     {  $start    {$_ [0]}}
 
 #
 # Construction
@@ -90,7 +91,7 @@ sub _classical_layout {
 
 
 #
-# Randomly name the rooms.
+# Randomly name the rooms; then store them in order.
 #
 sub _name_rooms {
     my $self  = shift;
@@ -101,6 +102,8 @@ sub _name_rooms {
     for (my $i = 0; $i < @names; $i ++) {
         $rooms {$self} [$i] -> set_name ($names [$i]);
     }
+
+    $rooms {$self} = [sort {$a -> name <=> $b -> name} @{$rooms {$self}}];
 
     $self;
 }
@@ -124,6 +127,33 @@ sub _create_hazards {
 }
 
 
+#
+# Describe the room the player is currently in.
+#
+sub describe {
+    my $self = shift;
+
+    my $text;
+
+    my $room = $self -> location;
+
+    $text  = "You are in room " . $room -> name . ".\n";
+    $text .= "I smell a Wumpus!\n" if $room -> near_hazard ($WUMPUS);
+    $text .= "I feel a draft.\n"   if $room -> near_hazard ($PIT);
+    $text .= "Bats nearby!\n"      if $room -> near_hazard ($BAT);
+
+    $text .= "Tunnels lead to " . join " ", sort {$a <=> $b}
+                                            map  {$_ -> name} $room -> exits;
+    $text .= ".\n";
+
+    $text;
+}
+
+
+sub can_move {
+    my $self = shift;
+    my $dest = shift;
+}
 
 
 __END__

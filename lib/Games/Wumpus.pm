@@ -28,30 +28,6 @@ sub init {
     $self;
 }
 
-#
-# Describe the current room.
-#
-sub describe {
-    my $self = shift;
-
-    my $text;
-
-    my $room = $cave {$self} -> location;
-
-    $text  = "You are in room " . $room -> name . ".\n";
-    $text .= "I smell a Wumpus!\n" if $room -> near_hazard ($WUMPUS);
-    $text .= "I feel a draft.\n"   if $room -> near_hazard ($PIT);
-    $text .= "Bats nearby!\n"      if $room -> near_hazard ($BAT);
-
-    $text .= "Tunnels lead to " . join " ", sort {$a <=> $b}
-                                            map  {$_ -> name} $room -> exits;
-    $text .= ".\n";
-
-    $text;
-}
-
-
-
 
 #
 # Move to a different room.
