@@ -1,6 +1,7 @@
 lib/Games/Wumpus.pm
 lib/Games/Wumpus/Cave.pm
 lib/Games/Wumpus/Room.pm
+lib/Games/Wumpus/Constants.pm
 bin/wumpus
 Makefile.PL
 MANIFEST
