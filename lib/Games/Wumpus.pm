@@ -120,7 +120,7 @@ sub shoot {
             return 1, "Ouch! Arrow got you!";
         }
         default {
-            push @mess => "Missed";
+            push @mess => "Missed!";
         }
     }
 
@@ -132,9 +132,12 @@ sub shoot {
     }
 
     if ($self -> lose_arrow < 1) {
+        $self -> lose;
         return 1, @mess,
                  "You ran out of arrows. Wumpus will eventually eat you."
     }
+
+    return 1, @mess;
 }
 
 
