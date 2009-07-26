@@ -8,9 +8,68 @@ no  warnings 'syntax';
 
 use Games::Wumpus;
 
+sub prompt;
+sub read_command;
+sub cmd_move;
+sub cmd_shoot;
+sub cmd_help;
+
 my $game = Games::Wumpus -> new -> init;
 
-say $game -> describe;
+while (!$game -> finished) {
+    print $game -> describe;
+
+    prompt;
+    my ($cmd, @args) = read_command;
+
+    given ($cmd) {
+        when ("Q") {
+            say "Eventually, the Wumpus gets you. You die.";
+            exit 1;
+        }
+        when ("M") {
+            cmd_move @args;
+        }
+        when ("S") {
+            cmd_shoot @args;
+        }
+        when (/[H?]/) {
+            cmd_help;
+        }
+        default {
+            say "Unknown command. Type ? for help.";
+        }
+    }
+}
+
+
+sub prompt {
+    print "command > ";
+}
+
+sub read_command {
+    my $line = <>;
+    chomp $line;
+    $line =~ s/^\s+//;
+    my ($cmd, @args) = split ' ', $line;
+    $cmd = uc substr $cmd, 0, 1;
+    ($cmd, @args);
+}
+
+sub cmd_move  {
+    my @args = @_;
+    if (@args != 1 || $args [0] !~ /^[0-9]+$/) {
+        say "Usage M <number>";
+    }
+    else {
+        my ($r, @mess) = $game -> move ($args [0]);
+        print @mess;
+    }
+}
+
+
+sub cmd_shoot {1;}
+sub cmd_help  {1;}
 
 
 __END__

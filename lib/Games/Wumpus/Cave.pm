@@ -146,9 +146,16 @@ sub describe {
 }
 
 
-sub can_move {
+#
+# Return whether player can move from current destination to new location.
+#
+# If the current location has an exit with the given name, then yes.
+#
+sub can_move_to {
     my $self = shift;
-    my $dest = shift;
+    my $new  = shift;
+
+    $self -> location -> exit_by_name ($new) ? 1 : 0;
 }
 
 

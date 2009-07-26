@@ -15,15 +15,17 @@ use Games::Wumpus::Room;
 
 fieldhash my %cave;
 fieldhash my %arrows;
+fieldhash my %finished;
 
 sub new  {bless \do {my $var} => shift}
 sub init {
     my $self = shift;
 
-    $cave   {$self} = Games::Wumpus::Cave -> new -> init;
-    $arrows {$self} = $NR_OF_ARROWS;
+    $cave     {$self} = Games::Wumpus::Cave -> new -> init;
+    $arrows   {$self} = $NR_OF_ARROWS;
+    $finished {$self} = 0;
 
-    $cave   {$self} -> set_location ($cave {$self} -> start);
+    $cave     {$self} -> set_location ($cave {$self} -> start);
 
     $self;
 }
@@ -31,8 +33,9 @@ sub init {
 #
 # Accessors
 #
-sub cave   {$cave   {$_ [0]}}
-sub arrows {$arrows {$_ [0]}}
+sub cave     {$cave     {$_ [0]}}
+sub arrows   {$arrows   {$_ [0]}}
+sub finished {$finished {$_ [0]}}
 
 
 #
@@ -48,11 +51,17 @@ sub describe {
 }
 
 #
-# Move to a different room.
+# Try to move a different room. The argument is well formatted, 
+# but not necessarely valid.
 #
 sub move {
     my $self = shift;
-    my $room = shift;
+    my $new  = shift;
+
+    unless ($self -> cave -> can_move_to ($new)) {
+        return (0, "There's no tunnel to $new\n");
+    }
+
 }
 
 
