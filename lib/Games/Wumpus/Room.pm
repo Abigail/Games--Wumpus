@@ -31,16 +31,16 @@ sub init {
 #
 # Accessors
 #
-sub   set_name         {$name   {$_ [0]}  =  $_ [1]}
+sub   set_name         {$name   {$_ [0]}  =  $_ [1]; $_ [0]}
 sub       name         {$name   {$_ [0]}}
 
-sub   set_hazard       {$hazard {$_ [0]} |=  $_ [1]}
+sub   set_hazard       {$hazard {$_ [0]} |=  $_ [1]; $_ [0]}
 sub       hazards      {$hazard {$_ [0]}}
-sub clear_hazard       {$hazard {$_ [0]} &= ~$_ [1]}
-sub clear_hazards      {$hazard {$_ [0]}  =  0}
+sub clear_hazard       {$hazard {$_ [0]} &= ~$_ [1]; $_ [0]}
+sub clear_hazards      {$hazard {$_ [0]}  =  0;      $_ [0]}
 sub   has_hazard       {$hazard {$_ [0]} &   $_ [1]}
 
-sub   add_exit         {push @{$exit {$_ [0]}} => $_ [1]}
+sub   add_exit         {push @{$exit {$_ [0]}} => $_ [1]; $_ [0]}
 sub       exits        {     @{$exit {$_ [0]}}}
 sub       exit_by_name {grep {$_ -> name eq $_ [1]} $_ [0] -> exits}
 
