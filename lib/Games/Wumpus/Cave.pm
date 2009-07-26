@@ -35,10 +35,13 @@ sub     rooms       {@{$rooms    {$_ [0]}}}
 sub     room        {  $rooms    {$_ [0]} [$_ [1] - 1]}
 sub     random_room {  $rooms    {$_ [0]} [rand @{$rooms {$_ [0]}}]}
 
-sub     location  {  $location {$_ [0]}}
-sub set_location  {  $location {$_ [0]} = $_ [1]}
+sub     location    {  $location {$_ [0]}}
+sub set_location    {  $location {$_ [0]} = $_ [1]; $_ [0]}
 
-sub     start     {  $start    {$_ [0]}}
+sub     wumpus      {  $wumpus   {$_ [0]}}
+sub set_wumpus      {  $wumpus   {$_ [0]} = $_ [1]; $_ [0]}
+
+sub     start       {  $start    {$_ [0]}}
 
 #
 # Construction
@@ -60,13 +63,13 @@ sub init {
     if ($::DEBUG) {
         foreach my $room (@{$rooms {$self}}) {
             if ($room -> has_hazard ($WUMPUS)) {
-                say "Wumpus in ", $room -> name;
+                say STDERR "Wumpus in ", $room -> name;
             }
             if ($room -> has_hazard ($BAT)) {
-                say "Bat in ", $room -> name;
+                say STDERR "Bat in ", $room -> name;
             }
             if ($room -> has_hazard ($PIT)) {
-                say "Pit in ", $room -> name;
+                say STDERR "Pit in ", $room -> name;
             }
         }
     }
@@ -130,7 +133,11 @@ sub _create_hazards {
 
     my @rooms = shuffle @{$rooms {$self}};
 
-   (pop @rooms) -> set_hazard ($WUMPUS) for 1 .. $NR_OF_WUMPUS;
+    my $wumpus_room = pop @rooms;
+    $wumpus_room -> set_hazard ($WUMPUS);
+
+    $self -> set_wumpus ($wumpus_room);
+
    (pop @rooms) -> set_hazard ($PIT)    for 1 .. $NR_OF_PITS;
    (pop @rooms) -> set_hazard ($BAT)    for 1 .. $NR_OF_BATS;
 
@@ -206,6 +213,65 @@ sub move {
     return;
 }
 
+
+#
+# Shoot an arrow. Return the first thing hit (ends shot). 
+# If a tunnel doesn't exist, pick something at random.
+#
+sub shoot {
+    my $self = shift;
+    my @path = @_;
+
+    my $cur  = $self -> location;
+
+    foreach my $p (@path) {
+        #
+        # Is $p a valid exit of $cur?
+        #
+        my $e = $cur -> exit_by_name ($p);
+        unless ($e) {
+            #
+            # Not a valid exit. Pick one at random.
+            #
+            my @e = $cur -> exits;
+            $e = $e [rand @e];
+        }
+        $cur = $e;
+
+        if ($cur -> has_hazard ($WUMPUS)) {return $WUMPUS}
+        if ($cur == $self -> location)    {return $PLAYER}
+    }
+}
+
+
+
+#
+# Stir the Wumpus. It *may* move.
+#
+# Return true if it moves, false otherwise.
+#
+sub stir_wumpus {
+    my $self = shift;
+
+    if (rand (1) < $WUMPUS_MOVES) {
+        #
+        # He moves.
+        #
+        my @exits = $self -> wumpus -> exits;
+        my $new   = $exits [rand @exits];
+
+        if ($::DEBUG) {
+            say STDERR "Wumpus moves to ", $new -> name;
+        }
+
+        $self -> wumpus -> clear_hazard ($WUMPUS);
+        $new  -> set_hazard ($WUMPUS);
+        $self -> set_wumpus ($new);
+        return 1;
+    }
+
+    return 0;
+}
 
 
 __END__

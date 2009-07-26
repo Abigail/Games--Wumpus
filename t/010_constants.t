@@ -15,6 +15,7 @@ BEGIN {
 is $WUMPUS, 1, '$WUMPUS';
 is $BAT,    2, '$BAT';
 is $PIT,    4, '$PIT';
+is $PLAYER, 8, '$PLAYER';
 
 is $NR_OF_WUMPUS, 1, '$NR_OF_WUMPUS';
 is $NR_OF_BATS,   2, '$NR_OF_BATS';
@@ -25,5 +26,7 @@ is scalar @HAZARDS, 3, "3 Hazards";
 ok grep ({$_ == $WUMPUS} @HAZARDS), "Wumpus is a hazard";
 ok grep ({$_ == $BAT   } @HAZARDS), "Bat is a hazard";
 ok grep ({$_ == $PIT   } @HAZARDS), "Pit is a hazard";
+
+is $WUMPUS_MOVES, .75, '$WUMPUS_MOVES';
 
 __END__

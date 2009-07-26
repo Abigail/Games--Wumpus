@@ -32,11 +32,12 @@ sub init {
 #
 # Accessors
 #
-sub cave     {$cave     {$_ [0]}}
-sub arrows   {$arrows   {$_ [0]}}
-sub finished {$finished {$_ [0]}}
-sub win      {$finished {$_ [0]} = 1}
-sub lose     {$finished {$_ [0]} = 0}
+sub cave       {   $cave     {$_ [0]}}
+sub arrows     {   $arrows   {$_ [0]}}
+sub lose_arrow {-- $arrows   {$_ [0]}}
+sub finished   {   $finished {$_ [0]}}
+sub win        {   $finished {$_ [0]} = 1}
+sub lose       {   $finished {$_ [0]} = 0}
 
 
 #
@@ -81,6 +82,59 @@ sub move {
     }
     return 1, @messages;
 
+}
+
+
+#
+# Try to move a different room. The argument is well formatted, 
+# but not necessarely valid.
+#
+sub shoot {
+    my $self  = shift;
+    my @rooms = @_;
+
+    if ($self -> arrows < 1) {
+        #
+        # This shouldn't be able to happen.
+        #
+        $self -> lose;
+        return 0, "You are out of arrows";
+    }
+
+    for (my $i = 2; $i < @rooms; $i ++) {
+        if ($rooms [$i] eq $rooms [$i - 2]) {
+            return 0, "Arrows aren't that crooked - try another path";
+        }
+    }
+
+    my $hit = $self -> cave -> shoot (@rooms);
+
+    my @mess;
+    given ($hit) {
+        when ($WUMPUS) {
+            $self -> win;
+            return 1, "Ha! You got the Wumpus!";
+        }
+        when ($PLAYER) {
+            $self -> lose;
+            return 1, "Ouch! Arrow got you!";
+        }
+        default {
+            push @mess => "Missed";
+        }
+    }
+
+    $self -> cave -> stir_wumpus;
+
+    if ($self -> cave -> wumpus == $self -> cave -> location) {
+        $self -> lose;
+        return 1, @mess, "Tsk Tsk Tsk - Wumpus got you!";
+    }
+
+    if ($self -> lose_arrow < 1) {
+        return 1, @mess,
+                 "You ran out of arrows. Wumpus will eventually eat you."
+    }
 }
 
 

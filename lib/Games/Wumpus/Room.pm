@@ -42,7 +42,12 @@ sub   has_hazard       {$hazard {$_ [0]} &   $_ [1]}
 
 sub   add_exit         {push @{$exit {$_ [0]}} => $_ [1]; $_ [0]}
 sub       exits        {     @{$exit {$_ [0]}}}
-sub       exit_by_name {grep {$_ -> name eq $_ [1]} $_ [0] -> exits}
+sub       exit_by_name {
+    my $self = shift;
+    my $name = shift;
+    my ($e)  = grep {$_ -> name eq $name} $self -> exits;
+    return $e;
+}
 
 #
 # Hazards nearby?

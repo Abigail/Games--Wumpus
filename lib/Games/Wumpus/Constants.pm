@@ -13,8 +13,9 @@ no warnings 'syntax';
 use Exporter ();
 our @ISA    = 'Exporter';
 our @EXPORT = qw [
-    $WUMPUS $BAT $PIT @HAZARDS
+    $WUMPUS $BAT $PIT $PLAYER @HAZARDS
     $NR_OF_WUMPUS $NR_OF_BATS $NR_OF_PITS $NR_OF_ARROWS
+    $WUMPUS_MOVES
     @CLASSICAL_LAYOUT
 ];
 
@@ -22,8 +23,9 @@ our @EXPORT = qw [
 # Hazards
 #
 our $WUMPUS        = 1 << 0;
-our $BAT           = 1 << 1;;
-our $PIT           = 1 << 2;;
+our $BAT           = 1 << 1;
+our $PIT           = 1 << 2;
+our $PLAYER        = 1 << 3;
 our @HAZARDS       = ($WUMPUS, $BAT, $PIT);
 
 our $NR_OF_WUMPUS  = 1;

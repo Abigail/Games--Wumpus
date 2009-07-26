@@ -37,9 +37,9 @@ is  scalar $room -> exits, 0, "No exits";
 is  $room -> add_exit (bless \do {my $x = "one"}), $room, "Add exit";
 is  $room -> add_exit (bless \do {my $x = "two"}), $room, "Add exit";
 is  scalar $room -> exits, 2, "Two exits";
-is  scalar $room -> exit_by_name ("one"), 1, "Got exit";
-is  scalar $room -> exit_by_name ("two"), 1, "Got exit";
-is  scalar $room -> exit_by_name ("three"), 0, "Didn't get exit";
+ok  scalar $room -> exit_by_name ("one"), "Got exit";
+ok  scalar $room -> exit_by_name ("two"), "Got exit";
+ok !scalar $room -> exit_by_name ("three"), "Didn't get exit";
 
 
 sub name {${$_ [0]}}
