@@ -77,7 +77,32 @@ sub cmd_move  {
 
 
 sub cmd_shoot {1;}
-sub cmd_help  {1;}
+sub cmd_help  {print <<'--'}
+ Welcome to Hunt the Wumpus!
+
+ You found yourself in a cave system, consisting of rooms, tunnels between
+ the rooms, a Wumpus, bats and bottomless pits. You are equipped with
+ a couple of crooked arrows, and your goal is to shoot the Wumpus before
+ it eats you.
+
+ In each room, you have two options: either you move to an adjacent room,
+ or you shoot an arrow. To move to another room, type 'M', a space, and
+ the room you like to move to (there must be a tunnel from your current
+ room to the room you want to move to). To shoot an arrow, type 'S', a 
+ space, and a list (space separated) of rooms you want to arrow to move
+ through (1-5 rooms). If the arrow hits the Wumpus, you win the game.
+ Otherwise, you may wake up the Wumpus, causing him to move. If he finds
+ you, he'll eat you.
+
+ If you enter a room containing a pit, you fall in the pit and you die.
+ If you enter a room containing a bat, the bat will pick you up, and drop
+ you in a random location. 
+
+ If you are in a room and there's a Wumpus, a pit, or a bat nearby, I'll
+ drop a hint.
+
+ Success!
+--
 
 
 __END__
