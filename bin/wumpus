@@ -14,9 +14,11 @@ sub cmd_move;
 sub cmd_shoot;
 sub cmd_help;
 
+our $DEBUG = 1;
+
 my $game = Games::Wumpus -> new -> init;
 
-while (!$game -> finished) {
+while (!defined $game -> finished) {
     print $game -> describe;
 
     prompt;
@@ -24,8 +26,8 @@ while (!$game -> finished) {
 
     given ($cmd) {
         when ("Q") {
-            say "Eventually, the Wumpus gets you. You die.";
-            exit 1;
+            say "Eventually, the Wumpus gets you.";
+            $game -> lose;
         }
         when ("M") {
             cmd_move @args;
@@ -40,6 +42,12 @@ while (!$game -> finished) {
             say "Unknown command. Type ? for help.";
         }
     }
+}
+
+given ($game -> finished) {
+    when (0) {say "You lost the game."; exit 1}
+    when (1) {say "You won the game.";  exit 0}
+    default  {say "Impossible."; exit 255}
 }
 
 
@@ -63,7 +71,7 @@ sub cmd_move  {
     }
     else {
         my ($r, @mess) = $game -> move ($args [0]);
-        print @mess;
+        say for @mess;
     }
 }
 

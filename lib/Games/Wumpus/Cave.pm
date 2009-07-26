@@ -31,8 +31,9 @@ fieldhash my %location;   # Location of the player.
 #
 # Accessors
 #
-sub     rooms     {@{$rooms    {$_ [0]}}}
-sub     room      {  $rooms    {$_ [0]} [$_ [1] - 1]}
+sub     rooms       {@{$rooms    {$_ [0]}}}
+sub     room        {  $rooms    {$_ [0]} [$_ [1] - 1]}
+sub     random_room {  $rooms    {$_ [0]} [rand @{$rooms {$_ [0]}}]}
 
 sub     location  {  $location {$_ [0]}}
 sub set_location  {  $location {$_ [0]} = $_ [1]}
@@ -55,6 +56,22 @@ sub init {
 
     $self -> _name_rooms;
     $self -> _create_hazards;
+
+    if ($::DEBUG) {
+        foreach my $room (@{$rooms {$self}}) {
+            if ($room -> has_hazard ($WUMPUS)) {
+                say "Wumpus in ", $room -> name;
+            }
+            if ($room -> has_hazard ($BAT)) {
+                say "Bat in ", $room -> name;
+            }
+            if ($room -> has_hazard ($PIT)) {
+                say "Pit in ", $room -> name;
+            }
+        }
+    }
+
+    $self;
 }
 
 #
@@ -157,6 +174,38 @@ sub can_move_to {
 
     $self -> location -> exit_by_name ($new) ? 1 : 0;
 }
+
+
+#
+# Move the player to a new location. Return the hazards encountered.
+# Since bats may move the player, encountering a new hazard, more
+# than one hazard may be encountered.
+#
+sub move {
+    my $self = shift;
+    my $new  = shift;
+
+    my @hazards;
+
+    $self -> set_location ($self -> room ($new));
+
+    if ($self -> location -> has_hazard ($WUMPUS)) {
+        # Death.
+        return $WUMPUS;
+    }
+    if ($self -> location -> has_hazard ($PIT)) {
+        # Death.
+        return $PIT;
+    }
+    if ($self -> location -> has_hazard ($BAT)) {
+        # Moved.
+        return $BAT, $self -> move ($self -> random_room -> name);
+    }
+
+    # Nothing special.
+    return;
+}
+
 
 
 __END__

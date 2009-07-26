@@ -23,7 +23,6 @@ sub init {
 
     $cave     {$self} = Games::Wumpus::Cave -> new -> init;
     $arrows   {$self} = $NR_OF_ARROWS;
-    $finished {$self} = 0;
 
     $cave     {$self} -> set_location ($cave {$self} -> start);
 
@@ -36,6 +35,8 @@ sub init {
 sub cave     {$cave     {$_ [0]}}
 sub arrows   {$arrows   {$_ [0]}}
 sub finished {$finished {$_ [0]}}
+sub win      {$finished {$_ [0]} = 1}
+sub lose     {$finished {$_ [0]} = 0}
 
 
 #
@@ -61,6 +62,24 @@ sub move {
     unless ($self -> cave -> can_move_to ($new)) {
         return (0, "There's no tunnel to $new\n");
     }
+
+    my @hazards = $self -> cave -> move ($new);
+
+    my @messages;
+    foreach (@hazards) {
+        when ($WUMPUS) {
+            $self -> lose;
+            push @messages => "Oops! Bumped into a Wumpus!";
+        }
+        when ($PIT) {
+            $self -> lose;
+            push @messages => "YYYIIIIEEEE! Fell in a pit!";
+        }
+        when ($BAT) {
+            push @messages => "ZAP! Super bat snatch! Elsewhereville for you!";
+        }
+    }
+    return 1, @messages;
 
 }
 
