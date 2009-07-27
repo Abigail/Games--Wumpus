@@ -6,7 +6,7 @@ use strict;
 use warnings;
 no  warnings 'syntax';
 
-our $VERSION = '2009072701';
+our $VERSION = '2009072702';
 
 #
 # Cave for the wumpus game.
