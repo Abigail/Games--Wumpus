@@ -5,7 +5,7 @@ use strict;
 use warnings;
 no  warnings 'syntax';
 
-our $VERSION = '2009072401';
+our $VERSION = '2009072701';
 
 use Hash::Util::FieldHash qw [fieldhash];
 
@@ -61,7 +61,7 @@ sub move {
     my $new  = shift;
 
     unless ($self -> cave -> can_move_to ($new)) {
-        return (0, "There's no tunnel to $new\n");
+        return (0, "There's no tunnel to $new.");
     }
 
     my @hazards = $self -> cave -> move ($new);
@@ -99,6 +99,10 @@ sub shoot {
         #
         $self -> lose;
         return 0, "You are out of arrows";
+    }
+
+    unless ($self -> cave -> can_move_to ($rooms [0])) {
+        return (0, "There's no tunnel to " . $rooms [0]);
     }
 
     for (my $i = 2; $i < @rooms; $i ++) {
@@ -147,26 +151,120 @@ __END__
 
 =head1 NAME
 
-Games::Wumpus - Abstract
+Games::Wumpus - Play Hunt the Wumpus
 
 =head1 SYNOPSIS
 
+ my $game = Games::Wumpus -> new -> init;
+
+ while (!defined $game -> finished) {
+    ($status, @messages) = $game -> move  ($someplace);
+    say for @messages;
+    ($status, @messages) = $game -> shoot (@somewhere);
+    say for @messages;
+ }
+
+ if ($game -> finished) {say "Won!"}
+ else                   {say "Lost!"}
+
 =head1 DESCRIPTION
+
+This class can be used to play a game of Hunt the Wumpus. It will keep
+state, perform action, and deduce whether a game is won or lost.
+
+The following methods are available:
+
+=over 4
+
+=item C<< new >>
+
+Class methods that returns an uninitialized object.
+
+=item C<< init >>
+
+Initializes an object. Creates a C<< Games::Wumpus::Cave >> object,
+fills the players quiver with arrows, and places the player at the
+start location. Returns the initialized object.
+
+=item C<< cave >>
+
+Accessor returning the cave used in the current game.
+
+=item C<< item >>
+
+Accessor returning the number of arrows.
+
+=item C<< lose_arrow >>
+
+Accessor to reduce the number of arrows by one.
+
+=item C<< finished >>
+
+Accessor returning the win/lose state of the game. If an undefined value
+is returned, the game isn't finished yet. A false but defined value means
+the player has lost the game (eaten by the Wumpus, fallen in a pit, shot
+by an arrow, ran out of arrows). A true value means the game was won 
+(the Wumpus was shot).
+
+=item C<< win >>
+
+Accessor setting a win for the player.
+
+=item C<< lose >>
+
+Accessor setting the game lost for the player.
+
+=item C<< describe >>
+
+Returns a string describing where the player is in the cave, the tunnels
+leading from the current location, any hints regarding nearby hazards, 
+and the number of arrows left.
+
+=item C<< move >>
+
+Takes a new location as argument. It assumes the argument is well formatted - 
+that is, exactly one, defined, argument is parsed. Returns a status and a
+list of strings. If the player cannot move to the specified location
+C<< 0 >> is returned as status, and the reason why as a string. Otherwise
+C<< 1 >> is returned, and a (possibly empty) list of strings describing
+encounters with hazards. If the Wumpus or a pit is encountered, the game
+is declared a loss.
+
+=item C<< shoot >>
+
+Takes a list (1 to 5) of locations as argument -- the path a shot arrow
+must follow. It assumes the argument is well formatted, 1 to 5 defined
+values. Returns a status and a list of strings. If the shot cannot be
+performed (no arrows, path goes through the same tunnel twice in succession,
+first location isn't connected to current location), C<< 0 >> and the reason
+why the shot cannot be performed is returned as status and list of strings.
+Otherwise, C<< 1 >> is returned, and list of strings describing interesting
+events. If the Wumpus is shot, the game is won. If the player is shot, the
+game is lost. Shooting an arrow may cause the Wumpus to move (and eat you).
+
+=back
 
 =head1 BUGS
 
+None known.
+
 =head1 TODO
 
+Configuration of the game should be possible.
+
 =head1 SEE ALSO
+
+L<< Games::Wumpus::Cave >>, L<< Games::Wumpus::Room >>,
+L<< Games::Wumpus::Constants >>
 
 =head1 DEVELOPMENT
 
 The current sources of this module are found on github,
-L<< git://github.com/Abigail/games--wumpus.git >>.
+L<< git://github.com/Abigail/Games--Wumpus.git >>.
 
 =head1 AUTHOR
 
-Abigail, L<< mailto:cpan@abigail.be >>.
+Abigail, L<< mailto:wumpus@abigail.be >>.
 
 =head1 COPYRIGHT and LICENSE
 

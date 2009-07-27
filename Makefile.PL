@@ -20,7 +20,7 @@ my %args = (
     META_MERGE           => {
         build_requires   => {'Test::More' => 0},
         resources        => {
-            repository   =>  'git://github.com/Abigail/games--wumpus.git',
+            repository   =>  'git://github.com/Abigail/Games--Wumpus.git',
         },
         keywords         => [qw [ ]],
     },

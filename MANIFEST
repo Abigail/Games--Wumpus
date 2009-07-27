@@ -6,6 +6,7 @@ bin/wumpus
 Makefile.PL
 MANIFEST
 t/000_basic.t
+t/005_version.t
 t/010_constants.t
 t/100_room.t
 t/200_cave.t

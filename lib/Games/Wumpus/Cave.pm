@@ -4,7 +4,9 @@ use 5.010;
 
 use strict;
 use warnings;
-no warnings 'syntax';
+no  warnings 'syntax';
+
+our $VERSION = '2009072701';
 
 #
 # Cave for the wumpus game.
@@ -61,17 +63,22 @@ sub init {
     $self -> _create_hazards;
 
     if ($::DEBUG) {
+        my %h;
         foreach my $room (@{$rooms {$self}}) {
             if ($room -> has_hazard ($WUMPUS)) {
-                say STDERR "Wumpus in ", $room -> name;
+                push @{$h {Wumpus}} => $room -> name;
             }
             if ($room -> has_hazard ($BAT)) {
-                say STDERR "Bat in ", $room -> name;
+                push @{$h {Bat}} => $room -> name;
             }
             if ($room -> has_hazard ($PIT)) {
-                say STDERR "Pit in ", $room -> name;
+                push @{$h {Pit}} => $room -> name;
             }
         }
+        local $, = " ";
+        say STDERR "Wumpus in", @{$h {Wumpus}};
+        say STDERR "Bats in",   @{$h {Bat}};
+        say STDERR "Pits in",   @{$h {Pit}};
     }
 
     $self;
@@ -275,3 +282,159 @@ sub stir_wumpus {
 
 
 __END__
+
+=head1 NAME
+
+Games::Wumpus::Cave - Cave used for Hunt the Wumpus
+
+=head1 SYNOPSIS
+
+ my $cave = Games::Wumpus::Cave -> new -> init;
+
+ $survivor = $cave -> move  ($location);
+ @hazards  = $cave -> shoot (@path);
+
+
+=head1 DESCRIPTION
+
+C<< Games::Wumpus::Cave >> is used to keep track of the cave system of
+Hunt the Wumpus. It's used by C<< Games::Wumpus >> and should most likely
+not be used outside of C<< Games::Wumpus >>.
+
+The following methods are implemented:
+
+=over 4
+
+=item C<< new >>
+
+Class method returning an unintialized object.
+
+=item C<< init >>
+
+Initializes the cave system. Creates layout mimicing a dodecahedron:
+vertices are rooms, and edged are tunnels. After creating the layout,
+hazards (Wumpus, bats, pits) are randomly placed in the cave system.
+Then a start location is picked. The start location is garanteed not
+to contain a hazard. 
+
+=item C<< rooms >>
+
+Accessor returning all rooms in the cave system.
+
+=item C<< room >>
+
+Accessor returning room with the given name (small, non-negative integer).
+
+=item C<< random_room >>
+
+Accessor returning a random room from the cave system.
+
+=item C<< location >>
+
+Accessor returning the current location (room) of the player.
+
+=item C<< set_location >>
+
+Accessor setting the current location of the player.
+
+=item C<< wumpus >>
+
+Accessor returning the location of the Wumpus.
+
+=item C<< set_wumpus >>
+
+Accessor setting the location of the Wumpus.
+
+=item C<< start >>
+
+Accessor returning the start location of the player.
+
+=item C<< describe >>
+
+Describes the location the player is currently in, including outgoing
+tunnels, and nearby hazards. The description is returned as a string.
+
+=item C<< can_move_to >>
+
+Takes a location as argument. Returns true if there's a tunnel from the
+players current location to the given location, false otherwise.
+
+=item C<< move >>
+
+Move the player to the location given as argument. If the new location
+contains a bat, the player is dropped in a random location elsewhere in
+the cave system. Returns a (possibly empty) list of hazards encountered.
+If the list is non-empty, the last element of the list is either
+C<< $WUMPUS >> or C<< $PIT >>; all other elements must be C<< $BAT >>.
+
+=item C<< shoot >>
+
+Shoot an arrow from the players current location following the given path.
+Returns false if not hitting anything; the object hit (C<< $WUMPUS >> or
+C<< $PLAYER >>) otherwise. If the path contains a room which cannot be
+reached using a tunnel from the arrows current location, a random tunnel
+will be choosen.
+
+=item C<< stir_wumpus >>
+
+Poke the Wumpus. With a certain chance (C<< $WUMPUS_MOVES >>), the Wumpus
+picks a random tunnel and moves to the room at the other end. Returns
+true if the Wumpus moved, false otherwise.
+
+=back
+
+=head1 BUGS
+
+None known.
+
+=head1 TODO
+
+Configuration of the game should be possible.
+
+=head1 SEE ALSO
+
+L<< Games::Wumpus >>, L<< Games::Wumpus::Room >>,
+L<< Games::Wumpus::Constants >>
+
+=head1 DEVELOPMENT
+
+The current sources of this module are found on github,
+L<< git://github.com/Abigail/Games--Wumpus.git >>.
+
+=head1 AUTHOR
+
+Abigail, L<< mailto:wumpus@abigail.be >>.
+
+=head1 COPYRIGHT and LICENSE
+
+Copyright (C) 2009 by Abigail.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),   
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+=head1 INSTALLATION
+
+To install this module, run, after unpacking the tar-ball, the 
+following commands:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+=cut
