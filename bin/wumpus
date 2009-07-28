@@ -38,6 +38,9 @@ while (!defined $game -> finished) {
         when (/[H?]/) {
             cmd_help;
         }
+        when ("V") {
+            say "Wumpus version $Games::Wumpus::VERSION";
+        }
         default {
             say "Unknown command. Type ? for help.";
         }
@@ -160,7 +163,7 @@ Furthermore, a number of large bats live in the cave system. They won't kill
 you, but if you enter a room with a bat, the bat will pick you up, and drop
 you in a random location - which may contain the Wumpus or a pit.
 
-You have commands available:
+You have the following commands available:
 
 =over 4
 
@@ -187,6 +190,14 @@ wakes up and moves to a different location.
 =item C<< Q >>
 
 Quits the game.
+
+=item C<< H >> and C<< ? >>
+
+Displays a help message.
+
+=item C<< V >>
+
+Print version info of the game.
 
 =back
 
