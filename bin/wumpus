@@ -200,6 +200,10 @@ None currently known.
 
 Implement options to allow variations in cave layout and hazard density.
 
+=head1 ACKNOWLEDGEMENTS
+
+Hunt the Wumpus was designed in 1972 by Gregory Yob, and written in BASIC.
+
 =head1 SEE ALSO
 
 L<< http://en.wikipedia.org/wiki/Hunt_the_Wumpus >>
