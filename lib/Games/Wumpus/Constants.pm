@@ -6,7 +6,7 @@ use strict;
 use warnings;
 no  warnings 'syntax';
 
-our $VERSION = '2009072702';
+our $VERSION = '2009072801';
 
 #
 # Contants used in the Wumpus game.
