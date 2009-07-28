@@ -52,15 +52,16 @@ sub new {bless \do {my $var} => shift}
 
 sub init {
     my $self = shift;
+    my %args = @_;
 
     #
     # Classical layout.
     #
     $self -> _create_rooms (scalar @CLASSICAL_LAYOUT);
-    $self -> _classical_layout;
+    $self -> _classical_layout (%args);
 
-    $self -> _name_rooms;
-    $self -> _create_hazards;
+    $self -> _name_rooms       (%args);
+    $self -> _create_hazards   (%args);
 
     if ($::DEBUG) {
         my %h;
@@ -118,9 +119,11 @@ sub _classical_layout {
 #
 sub _name_rooms {
     my $self  = shift;
+    my %args  = @_;
 
     my $rooms = @{$rooms {$self}};
-    my @names = shuffle 1 .. $rooms;
+    my @names = 1 .. $rooms;
+       @names = shuffle @names if $args {shuffle_names};
 
     for (my $i = 0; $i < @names; $i ++) {
         $rooms {$self} [$i] -> set_name ($names [$i]);

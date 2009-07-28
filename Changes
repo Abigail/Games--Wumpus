@@ -1,5 +1,6 @@
 Version 2009072801
-Added Acknowledgements.
++ --shuffle-names option. Room names are no longer shuffled by default.
++ Added Acknowledgements.
 --
 Version 2009072702
 Use a README file
