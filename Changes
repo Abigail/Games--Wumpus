@@ -1,5 +1,6 @@
 Version 2009072801
 + --shuffle-names option. Room names are no longer shuffled by default.
++ Implemented V command.
 + Added Acknowledgements.
 --
 Version 2009072702
