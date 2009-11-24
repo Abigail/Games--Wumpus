@@ -1,10 +1,13 @@
+Version 2009112401
++ POD & Kwalitee tests.
+
 Version 2009072801
 + --shuffle-names option. Room names are no longer shuffled by default.
 + Implemented V command.
 + Added Acknowledgements.
---
+
 Version 2009072702
-Use a README file
-----
++ Use a README file
+
 Version 2009072701
-First release
++ First release

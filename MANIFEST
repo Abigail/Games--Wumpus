@@ -11,5 +11,8 @@ t/010_constants.t
 t/100_room.t
 t/200_cave.t
 t/201_describe.t
+t/950_pod.t
+t/960_pod_coverage.t
+t/990_kwalitee.t
 Changes
 README
