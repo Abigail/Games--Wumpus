@@ -6,11 +6,12 @@ use strict;
 use warnings;
 no warnings 'syntax';
 
-use Test::More 'no_plan';
+use Test::More 0.88;
 
-BEGIN {
-    use_ok 'Games::Wumpus::Room';
-}
+use Games::Wumpus::Room;
+
+our $r = eval "require Test::NoWarnings; 1";
+
 
 my $room = Games::Wumpus::Room -> new -> init;
 
@@ -43,5 +44,10 @@ ok !scalar $room -> exit_by_name ("three"), "Didn't get exit";
 
 
 sub name {${$_ [0]}}
+
+Test::NoWarnings::had_no_warnings () if $r;
+
+done_testing;
+
 
 __END__

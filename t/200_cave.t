@@ -4,14 +4,14 @@ use 5.010;
 
 use strict;
 use warnings;
-no warnings 'syntax';
+no  warnings 'syntax';
 
-use Test::More 'no_plan';
+use Test::More 0.88;
 
-BEGIN {
-    use_ok 'Games::Wumpus::Cave';
-    use_ok 'Games::Wumpus::Constants';
-}
+use Games::Wumpus::Cave;
+use Games::Wumpus::Constants;
+
+our $r = eval "require Test::NoWarnings; 1";
 
 my $cave = Games::Wumpus::Cave -> new -> init;
 
@@ -63,5 +63,8 @@ foreach my $i (1 .. 20) {
     is $room -> name, $i, "Got room $i";
 }
 
+Test::NoWarnings::had_no_warnings () if $r;
+
+done_testing;
 
 __END__

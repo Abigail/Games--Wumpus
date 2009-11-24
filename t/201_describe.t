@@ -4,14 +4,14 @@ use 5.010;
 
 use strict;
 use warnings;
-no warnings 'syntax';
+no  warnings 'syntax';
 
-use Test::More 'no_plan';
+use Test::More 0.88;
 
-BEGIN {
-    use_ok 'Games::Wumpus::Cave';
-    use_ok 'Games::Wumpus::Constants';
-}
+use Games::Wumpus::Cave;
+use Games::Wumpus::Constants;
+
+our $r = eval "require Test::NoWarnings; 1";
 
 my $cave = Games::Wumpus::Cave -> new -> init;
 
@@ -75,3 +75,11 @@ ok $desc =~ /I smell a Wumpus!\n/,      "Wumpus near";
 ok $desc =~ /I feel a draft\.\n/,       "Pits nearby";
 ok $desc =~ /Bats nearby!\n/,           "Bats nearby";
 ok $desc =~ /Tunnels lead to @names/,   "Tunnels ok";
+
+
+Test::NoWarnings::had_no_warnings () if $r;
+
+done_testing;
+
+
+__END__

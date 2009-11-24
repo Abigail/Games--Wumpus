@@ -6,11 +6,11 @@ use strict;
 use warnings;
 no warnings 'syntax';
 
-use Test::More 'no_plan';
+use Test::More 0.88;
 
-BEGIN {
-    use_ok 'Games::Wumpus::Constants';
-}
+use Games::Wumpus::Constants;
+
+our $r = eval "require Test::NoWarnings; 1";
 
 is $WUMPUS, 1, '$WUMPUS';
 is $BAT,    2, '$BAT';
@@ -28,5 +28,10 @@ ok grep ({$_ == $BAT   } @HAZARDS), "Bat is a hazard";
 ok grep ({$_ == $PIT   } @HAZARDS), "Pit is a hazard";
 
 is $WUMPUS_MOVES, .75, '$WUMPUS_MOVES';
+
+Test::NoWarnings::had_no_warnings () if $r;
+
+done_testing;
+
 
 __END__
